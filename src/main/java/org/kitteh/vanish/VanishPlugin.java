@@ -27,11 +27,13 @@ import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
-import java.util.HashSet;
+import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.logging.Level;
 
 public final class VanishPlugin extends JavaPlugin {
+
     final class UpdateCheck implements Runnable {
+
         private static final String CREDITS = "This updater code is based on the great work of Gravity";
 
         String getCredits() {
@@ -106,7 +108,7 @@ public final class VanishPlugin extends JavaPlugin {
         }
     }
 
-    private final HashSet<String> haveInventoriesOpen = new HashSet<>();
+    private final CopyOnWriteArraySet<String> haveInventoriesOpen = new CopyOnWriteArraySet<>();
     private String latestVersion = null;
     private boolean versionDiff = false;
     private VanishManager manager;
@@ -118,9 +120,7 @@ public final class VanishPlugin extends JavaPlugin {
      * @param name user's name
      */
     public void chestFakeClose(String name) {
-        synchronized (this.haveInventoriesOpen) {
-            this.haveInventoriesOpen.remove(name);
-        }
+        this.haveInventoriesOpen.remove(name);
     }
 
     /**
@@ -130,9 +130,7 @@ public final class VanishPlugin extends JavaPlugin {
      * @return true if currently using a fake chest
      */
     public boolean chestFakeInUse(String name) {
-        synchronized (this.haveInventoriesOpen) {
-            return this.haveInventoriesOpen.contains(name);
-        }
+        return this.haveInventoriesOpen.contains(name);
     }
 
     /**
@@ -141,9 +139,7 @@ public final class VanishPlugin extends JavaPlugin {
      * @param name user's name
      */
     public void chestFakeOpen(String name) {
-        synchronized (this.haveInventoriesOpen) {
-            this.haveInventoriesOpen.add(name);
-        }
+        this.haveInventoriesOpen.add(name);
     }
 
     /**
@@ -165,8 +161,8 @@ public final class VanishPlugin extends JavaPlugin {
     }
 
     /**
-     * Gets the latest found version
-     * Will show this version, if update checks are disabled
+     * Gets the latest found version Will show this version, if update checks
+     * are disabled
      *
      * @return the latest found version of VanishNoPacket
      */
@@ -184,8 +180,7 @@ public final class VanishPlugin extends JavaPlugin {
     }
 
     /**
-     * Indicates a player has just joined the server.
-     * Internal use only please
+     * Indicates a player has just joined the server. Internal use only please
      *
      * @param player player who has joined the server
      */
@@ -194,8 +189,7 @@ public final class VanishPlugin extends JavaPlugin {
     }
 
     /**
-     * Indicates a player has left the server
-     * Internal use only please
+     * Indicates a player has left the server Internal use only please
      *
      * @param player player who has left the server
      */
@@ -205,8 +199,7 @@ public final class VanishPlugin extends JavaPlugin {
     }
 
     /**
-     * Calls hooks for when a player has unvanished
-     * Internal use only please
+     * Calls hooks for when a player has unvanished Internal use only please
      *
      * @param player the un-vanishing user
      */
@@ -215,8 +208,7 @@ public final class VanishPlugin extends JavaPlugin {
     }
 
     /**
-     * Calls hooks for when player has vanished
-     * Internal use only please.
+     * Calls hooks for when player has vanished Internal use only please.
      *
      * @param player the vanishing player
      */
@@ -282,7 +274,8 @@ public final class VanishPlugin extends JavaPlugin {
 
         Settings.freshStart(this);
 
-        dance: if (this.getConfig().getBoolean("colornametags", true)) {
+        dance:
+        if (this.getConfig().getBoolean("colornametags", true)) {
             if (this.getServer().getPluginManager().isPluginEnabled("TagAPI")) {
                 try {
                     Class.forName("org.kitteh.tag.AsyncPlayerReceiveNameTagEvent");
@@ -371,8 +364,8 @@ public final class VanishPlugin extends JavaPlugin {
     }
 
     /**
-     * Gets if there is a difference in versions between this and latest
-     * Will always be false if update checks are disabled
+     * Gets if there is a difference in versions between this and latest Will
+     * always be false if update checks are disabled
      *
      * @return whether or not there's a new version available
      */
