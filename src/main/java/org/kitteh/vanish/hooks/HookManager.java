@@ -20,6 +20,7 @@ import org.kitteh.vanish.hooks.plugins.SpoutCraftHook;
 import org.kitteh.vanish.hooks.plugins.VaultHook;
 
 public final class HookManager {
+
     public enum HookType {
         BPERMISSIONS(BPermissionsHook.class),
         DISGUISE_CRAFT(DisguiseCraftHook.class),
@@ -53,16 +54,17 @@ public final class HookManager {
      * Deregisters a hook by object
      *
      * @param hook hook object to deregister
-     * @return a list of deregistered hook names. Empty list if nothing deregistered.
+     * @return a list of deregistered hook names. Empty list if nothing
+     * deregistered.
      */
     public List<String> deregisterHook(Hook hook) {
         final List<String> ret = new ArrayList<>();
-        for (final Map.Entry<String, Hook> i : this.hooks.entrySet()) {
-            if (i.getValue().equals(hook)) {
-                this.deregisterHook(i.getKey());
-                ret.add(i.getKey());
-            }
-        }
+        this.hooks.entrySet().stream().filter((i) -> (i.getValue().equals(hook))).map((i) -> {
+            this.deregisterHook(i.getKey());
+            return i;
+        }).forEachOrdered((i) -> {
+            ret.add(i.getKey());
+        });
         return ret;
     }
 
@@ -70,7 +72,8 @@ public final class HookManager {
      * Deregisters a hook
      *
      * @param name hook name to deregister
-     * @return the deregistered hook or null if no hook by the given name was registered
+     * @return the deregistered hook or null if no hook by the given name was
+     * registered
      */
     public Hook deregisterHook(String name) {
         final Hook ret = this.hooks.get(name);
@@ -93,7 +96,7 @@ public final class HookManager {
 
     /**
      * Gets a named, registered Hook
-     * 
+     *
      * @param name hook name
      * @return the named Hook if registered, null if no match.
      */
@@ -102,33 +105,33 @@ public final class HookManager {
     }
 
     public void onDisable() {
-        for (final Hook hook : this.hooks.values()) {
+        this.hooks.values().forEach((hook) -> {
             hook.onDisable();
-        }
+        });
     }
 
     public void onJoin(Player player) {
-        for (final Hook hook : this.hooks.values()) {
+        this.hooks.values().forEach((hook) -> {
             hook.onJoin(player);
-        }
+        });
     }
 
     public void onQuit(Player player) {
-        for (final Hook hook : this.hooks.values()) {
+        this.hooks.values().forEach((hook) -> {
             hook.onQuit(player);
-        }
+        });
     }
 
     public void onUnvanish(Player player) {
-        for (final Hook hook : this.hooks.values()) {
+        this.hooks.values().forEach((hook) -> {
             hook.onUnvanish(player);
-        }
+        });
     }
 
     public void onVanish(Player player) {
-        for (final Hook hook : this.hooks.values()) {
+        this.hooks.values().forEach((hook) -> {
             hook.onVanish(player);
-        }
+        });
     }
 
     /**
@@ -140,8 +143,9 @@ public final class HookManager {
     public void registerHook(String name, Class<? extends Hook> hookClazz) {
         try {
             this.registerHook(name, hookClazz.getConstructor(VanishPlugin.class).newInstance(this.plugin));
-        } catch (final NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
-            Debuggle.log("Failed to add hook " + name + ":" + e.getMessage());
+        } catch (final IllegalAccessException | IllegalArgumentException | InstantiationException | NoSuchMethodException | SecurityException | InvocationTargetException e) {
+            Debuggle.log("Failed to add hook " + name);
+            //e.printStackTrace();
         }
     }
 

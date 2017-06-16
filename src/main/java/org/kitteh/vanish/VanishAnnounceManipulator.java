@@ -16,12 +16,12 @@ import org.kitteh.vanish.hooks.plugins.GeoIPToolsHook;
 import org.kitteh.vanish.hooks.plugins.VaultHook;
 
 /**
- * Controller of announcing joins and quits that aren't their most honest.
- * Note that delayed announce methods can be called without checking
- * to see if it's enabled first. The methods confirm before doing anything
- * particularly stupid.
+ * Controller of announcing joins and quits that aren't their most honest. Note
+ * that delayed announce methods can be called without checking to see if it's
+ * enabled first. The methods confirm before doing anything particularly stupid.
  */
 public final class VanishAnnounceManipulator {
+
     private final List<String> delayedAnnouncePlayerList;
     private final VanishPlugin plugin;
     private final Map<String, Boolean> playerOnlineStatus;
@@ -50,11 +50,11 @@ public final class VanishAnnounceManipulator {
     }
 
     /**
-     * Gets the fake online status of a player
-     * Called by JSONAPI
+     * Gets the fake online status of a player Called by JSONAPI
      *
      * @param playerName name of the player to query
-     * @return true if player is considered online, false if not (or if not on server)
+     * @return true if player is considered online, false if not (or if not on
+     * server)
      */
     public boolean getFakeOnlineStatus(String playerName) {
         final Player player = this.plugin.getServer().getPlayerExact(playerName);
@@ -70,9 +70,8 @@ public final class VanishAnnounceManipulator {
     }
 
     /**
-     * Marks a player as quit
-     * Called when a player quits
-     * 
+     * Marks a player as quit Called when a player quits
+     *
      * @param player name of the player who just quit
      * @return the former fake online status of the player
      */

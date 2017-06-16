@@ -6,7 +6,7 @@
     <packaging>jar</packaging>
 
     <name>VanishNoPacket-spigot</name>
-    <version>3.19.2-SNAPSHOT</version>
+    <version>4.0-SNAPSHOT</version>
 
     <url>http://github.com/mbax/VanishNoPacket</url>
 
@@ -54,42 +54,45 @@
         </profile>
     </profiles>
 
-    <scm>
-        <connection>scm:git:git://github.com/mbax/VanishNoPacket.git</connection>
-        <developerConnection>scm:git:ssh://git@github.com/mbax/VanishNoPacket.git</developerConnection>
-        <url>https://github.com/mbax/VanishNoPacket</url>
-    </scm>
-
     <repositories>
+        <!-- Vault -->
+        <repository>
+            <id>vault-repo</id>
+            <url>http://nexus.hc.to/content/repositories/pub_releases</url>
+        </repository>
+        <!--
         <repository>
             <id>kitteh-repo</id>
             <url>http://repo.kitteh.org/content/groups/public</url>
         </repository>
+        -->
         <repository>
             <id>cnaude-repo</id>
             <url>http://cnaude.org/repo/</url>
         </repository>
-        <!--
         <repository>
-            <id>bukkit-repo</id>
-            <url>http://repo.bukkit.org/content/groups/public</url>
+            <id>dynmap</id>
+            <url>http://repo.mikeprimm.com/</url>
+        </repository> 
+        <repository>
+            <id>dmulloy2-repo</id>
+            <url>http://repo.dmulloy2.net/nexus/repository/public/</url>
         </repository>
-        -->
     </repositories>
 
     <dependencies>
         <dependency>
             <groupId>org.bukkit</groupId>
-            <artifactId>spigot-111</artifactId>
-            <version>1.11</version>
+            <artifactId>spigot-112</artifactId>
+            <version>1.12</version>
             <type>jar</type>
             <scope>provided</scope>
         </dependency>
         <!-- ProtocolLib -->
         <dependency>
-            <groupId>com.cnaude.protocol</groupId>
-            <artifactId>ProtocolLib</artifactId>
-            <version>3.6.3</version>
+            <groupId>com.comphenix.protocol</groupId>
+            <artifactId>ProtocolLib-API</artifactId>
+            <version>4.3.0</version>
         </dependency>
         <dependency>
             <groupId>org.getspout</groupId>
@@ -97,10 +100,17 @@
             <version>1.5.2-R1.0-SNAPSHOT-HOSTED</version>
             <optional>true</optional>
         </dependency>
+        <!-- DynmapAPI -->
         <dependency>
-            <groupId>com.cnaude.dynmap</groupId>
-            <artifactId>DynmapAPI</artifactId>
-            <version>2.1</version>
+            <groupId>us.dynmap</groupId>
+            <artifactId>dynmap-api</artifactId>
+            <version>2.5</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.bukkit</groupId>
+                    <artifactId>bukkit</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>de.bananaco</groupId>
@@ -174,11 +184,18 @@
                 </exclusion>
             </exclusions>
         </dependency>
+        <!-- Vault -->
         <dependency>
             <groupId>net.milkbowl.vault</groupId>
-            <artifactId>Vault</artifactId>
-            <version>1.5.3</version>
-            <type>jar</type>
+            <artifactId>VaultAPI</artifactId>
+            <version>1.6</version>
+            <scope>provided</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.bukkit</groupId>
+                    <artifactId>bukkit</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>junit</groupId>
@@ -238,8 +255,8 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.2</version>
                 <configuration>
-                    <source>1.7</source>
-                    <target>1.7</target>
+                    <source>1.8</source>
+                    <target>1.8</target>
                 </configuration>
             </plugin>
         </plugins>

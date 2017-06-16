@@ -19,12 +19,9 @@ import java.util.Map;
 import java.util.Random;
 import java.util.Set;
 import java.util.UUID;
-import java.util.logging.Level;
 
 public final class VanishManager {
-
     private final class ShowPlayerEntry {
-
         private final Player player;
         private final Player target;
 
@@ -43,9 +40,8 @@ public final class VanishManager {
     }
 
     private final class ShowPlayerHandler implements Runnable {
-
-        Set<ShowPlayerEntry> entries = new HashSet<>();
-        Set<ShowPlayerEntry> next = new HashSet<>();
+        Set<ShowPlayerEntry> entries = new HashSet<ShowPlayerEntry>();
+        Set<ShowPlayerEntry> next = new HashSet<ShowPlayerEntry>();
 
         public void add(ShowPlayerEntry player) {
             this.entries.add(player);
@@ -68,8 +64,8 @@ public final class VanishManager {
 
     private final VanishPlugin plugin;
     private final Set<String> vanishedPlayerNames = Collections.synchronizedSet(new HashSet<String>());
-    private final Map<String, Boolean> sleepIgnored = new HashMap<>();
-    private final Set<UUID> bats = new HashSet<>();
+    private final Map<String, Boolean> sleepIgnored = new HashMap<String, Boolean>();
+    private final Set<UUID> bats = new HashSet<UUID>();
     private final VanishAnnounceManipulator announceManipulator;
     private final Random random = new Random();
     private final ShowPlayerHandler showPlayer = new ShowPlayerHandler();
@@ -92,7 +88,8 @@ public final class VanishManager {
     }
 
     /**
-     * Gets the announcement manipulator Called by JSONAPI
+     * Gets the announcement manipulator
+     * Called by JSONAPI
      *
      * @return the Announce Manipulator
      */
@@ -144,7 +141,8 @@ public final class VanishManager {
     }
 
     /**
-     * Marks a player as having quit the game Do not call this method
+     * Marks a player as having quit the game
+     * Do not call this method
      *
      * @param player the player who has quit
      */
@@ -187,8 +185,10 @@ public final class VanishManager {
     }
 
     /**
-     * Toggles a player's visibility Called when a player calls /vanish Talks to
-     * the player and everyone with vanish.see Will trigger effects
+     * Toggles a player's visibility
+     * Called when a player calls /vanish
+     * Talks to the player and everyone with vanish.see
+     * Will trigger effects
      *
      * @param togglingPlayer the player disappearing
      */
@@ -214,7 +214,9 @@ public final class VanishManager {
     }
 
     /**
-     * Toggles a player's visibility Does not say anything. Will trigger effects
+     * Toggles a player's visibility
+     * Does not say anything.
+     * Will trigger effects
      * Called by toggleVanish(Player)
      *
      * @param vanishingPlayer
@@ -224,7 +226,8 @@ public final class VanishManager {
     }
 
     /**
-     * Toggles a player's visibility Does not say anything.
+     * Toggles a player's visibility
+     * Does not say anything.
      *
      * @param vanishingPlayer
      * @param effects if true, trigger effects
@@ -239,19 +242,19 @@ public final class VanishManager {
                 for (final Entity entity : vanishingPlayer.getNearbyEntities(100, 100, 100)) {
                     if ((entity != null) && (entity instanceof Creature)) {
                         final Creature creature = ((Creature) entity);
-                        if ((creature.getTarget() != null) && creature.getTarget().equals(vanishingPlayer)) {
+                        if ((creature != null) && (creature.getTarget() != null) && creature.getTarget().equals(vanishingPlayer)) {
                             creature.setTarget(null);
                         }
                     }
                 }
             }
             this.vanishedPlayerNames.add(vanishingPlayerName);
-            this.plugin.getLogger().log(Level.INFO, "{0} disappeared.", vanishingPlayerName);
+            this.plugin.getLogger().info(vanishingPlayerName + " disappeared.");
         } else {
             Debuggle.log("It's visible time! " + vanishingPlayer.getName());
             this.resetSleepingIgnored(vanishingPlayer);
             this.removeVanished(vanishingPlayerName);
-            this.plugin.getLogger().log(Level.INFO, "{0} reappeared.", vanishingPlayerName);
+            this.plugin.getLogger().info(vanishingPlayerName + " reappeared.");
         }
         if (effects) {
             final Location oneUp = vanishingPlayer.getLocation().add(0, 1, 0);
@@ -273,7 +276,8 @@ public final class VanishManager {
         }
         this.plugin.getServer().getPluginManager().callEvent(new VanishStatusChangeEvent(vanishingPlayer, vanishing));
         vanishingPlayer.sendPluginMessage(this.plugin, "vanishStatus", vanishing ? new byte[]{0x01} : new byte[]{0x00});
-        for (final Player otherPlayer : this.plugin.getServer().getOnlinePlayers()) {
+        final java.util.Collection<? extends Player> playerList = this.plugin.getServer().getOnlinePlayers();
+        for (final Player otherPlayer : playerList) {
             if (vanishingPlayer.equals(otherPlayer)) {
                 continue;
             }
@@ -301,7 +305,8 @@ public final class VanishManager {
     }
 
     /**
-     * Vanishes a player. Poof. This is a convenience method.
+     * Vanishes a player. Poof.
+     * This is a convenience method.
      *
      * @param vanishingPlayer player to hide
      * @param silent if true, does not say anything
@@ -319,7 +324,8 @@ public final class VanishManager {
     }
 
     /**
-     * Reveals a player. This is a convenience method.
+     * Reveals a player.
+     * This is a convenience method.
      *
      * @param revealingPlayer player to reveal
      * @param silent if true, does not say anything
@@ -337,7 +343,7 @@ public final class VanishManager {
     }
 
     private void effectBats(final Location location) {
-        final Set<UUID> batty = new HashSet<>();
+        final Set<UUID> batty = new HashSet<UUID>();
         for (int x = 0; x < 10; x++) {
             batty.add(location.getWorld().spawnEntity(location, EntityType.BAT).getUniqueId());
         }
