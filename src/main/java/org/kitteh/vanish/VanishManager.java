@@ -149,9 +149,6 @@ public final class VanishManager {
         this.resetSleepingIgnored(player);
         VanishPerms.userQuit(player);
         this.removeVanished(player.getName());
-        this.plugin.getServer().getOnlinePlayers().forEach((otherPlayer) -> {
-            otherPlayer.showPlayer(player);
-        });
     }
 
     /**
