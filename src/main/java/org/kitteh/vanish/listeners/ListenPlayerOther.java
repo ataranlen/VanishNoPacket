@@ -102,6 +102,8 @@ public final class ListenPlayerOther implements Listener {
                 case BEACON:
                     inventory = ((Beacon) blockState).getInventory();
                     break;
+			default:
+				break;
             }
             if (inventory != null) {
                 event.setCancelled(true);
@@ -132,21 +134,6 @@ public final class ListenPlayerOther implements Listener {
                 event.setCancelled(true);
             }
         }
-    }
-
-    @EventHandler
-    public void onPlayerQuit(PlayerQuitEvent event) {
-        final Player player = event.getPlayer();
-        if (this.plugin.getManager().isVanished(player)) {
-            this.plugin.messageStatusUpdate(ChatColor.DARK_AQUA + event.getPlayer().getName() + " has quit vanished");
-        }
-        this.plugin.getManager().playerQuit(player);
-        this.plugin.hooksQuit(player);
-        this.plugin.getManager().getAnnounceManipulator().dropDelayedAnnounce(player.getName());
-        if (!this.plugin.getManager().getAnnounceManipulator().playerHasQuit(player.getName()) || VanishPerms.silentQuit(player)) {
-            event.setQuitMessage(null);
-        }
-        this.plugin.chestFakeClose(event.getPlayer().getName());
     }
 
     @EventHandler(ignoreCancelled = true)
